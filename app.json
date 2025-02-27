@@ -1,0 +1,15 @@
+{
+    "id": "29025e21-7154-47bc-969f-97d4c530fdbc",
+    "version": "0.0.1",
+    "requiredApiVersion": "^1.44.0",
+    "iconFile": "icon.png",
+    "author": {
+        "name": "Rocket.Chat",
+        "homepage": "https://rocket.chat",
+        "support": "support@rocket.chat"
+    },
+    "name": "TimeOff",
+    "nameSlug": "timeoff",
+    "classFile": "TimeOffApp.ts",
+    "description": "Automatically notifies others that you're currently on time off"
+}
