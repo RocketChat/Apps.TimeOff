@@ -11,5 +11,6 @@
     "name": "TimeOff",
     "nameSlug": "timeoff",
     "classFile": "TimeOffApp.ts",
-    "description": "Automatically notifies others that you're currently on time off"
+    "description": "Automatically notifies others that you're currently on time off",
+    "implements": []
 }
