@@ -12,6 +12,7 @@ export async function helpCommand(app: TimeOffApp, context: SlashCommandContext,
         `*Commands*\n` +
         `• \`/time-off start\` - Start a new time off\n` +
         `• \`/time-off end\` - End an existing time off\n` +
+        `• \`/time-off status\` - Check the current time off status\n` +
         `• \`/time-off help\` - Display this help message\n`;
 
     const notifier = new AppNotifier(app, read);

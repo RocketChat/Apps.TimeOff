@@ -5,6 +5,7 @@ import { TimeOffApp } from "../TimeOffApp";
 import { helpCommand } from "./subcommands/Help";
 import { startCommand } from "./subcommands/Start";
 import { endCommand } from "./subcommands/End";
+import { statusCommand } from "./subcommands/Status";
 
 export class TimeOffCommand implements ISlashCommand {
     public command = 'time-off';
@@ -29,6 +30,9 @@ export class TimeOffCommand implements ISlashCommand {
                 break;
             case CommandEnum.END:
                 endCommand(this.app, context, read, persistence);
+                break;
+            case CommandEnum.STATUS:
+                statusCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.HELP:
             default:
