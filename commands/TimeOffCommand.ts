@@ -4,6 +4,7 @@ import { CommandEnum } from "../enums/CommandEnum";
 import { TimeOffApp } from "../TimeOffApp";
 import { helpCommand } from "./subcommands/Help";
 import { startCommand } from "./subcommands/Start";
+import { endCommand } from "./subcommands/End";
 
 export class TimeOffCommand implements ISlashCommand {
     public command = 'time-off';
@@ -27,7 +28,7 @@ export class TimeOffCommand implements ISlashCommand {
                 startCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.END:
-
+                endCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.HELP:
             default:
