@@ -17,7 +17,7 @@ export async function endCommand(app: TimeOffApp, context: SlashCommandContext, 
 
     let notificationMessage = NOTIFICATION_MESSAGES.ended;
 
-    if (!timeOffEntry) {
+    if (!timeOffEntry || timeOffEntry.status === Status.OUT_TIME_OFF) {
         notificationMessage = NOTIFICATION_MESSAGES.not_started;
         await notifier.notifyUser(room, currentUser, notificationMessage);
         return;
