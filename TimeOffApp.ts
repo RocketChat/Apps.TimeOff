@@ -13,11 +13,11 @@ import { IAppInfo } from '@rocket.chat/apps-engine/definition/metadata';
 import { TimeOffCommand } from './commands/TimeOffCommand';
 import { IMessage, IPostMessageSent } from '@rocket.chat/apps-engine/definition/messages';
 import { RoomType } from '@rocket.chat/apps-engine/definition/rooms';
-import { TimeOffPersistence } from './persistence/TimeOffPersistence';
-import { ITimeOff } from './definitions/TimeOff';
-import { notifyUser } from './helpers/Util';
-import { IUser } from '@rocket.chat/apps-engine/definition/users';
-import { Status } from './enums/Status';
+import { UserRepository } from './repositories/UserRepository';
+import { TimeOffService } from './services/TimeOffService';
+import { AppNotifier } from './notifiers/AppNotifier';
+import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
+import { TimeOffRepository } from './repositories/TimeOffRepository';
 
 export class TimeOffApp extends App implements IPostMessageSent {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -34,30 +34,15 @@ export class TimeOffApp extends App implements IPostMessageSent {
     }
 
     public async executePostMessageSent(message: IMessage, read: IRead, http: IHttp, persistence: IPersistence, modify: IModify): Promise<void> {
-        const sender: IUser = await read.getUserReader().getById(message.sender.id);
+        const userRepository = new UserRepository(read);
 
-        const members = message.room.userIds || [];
+        const timeOffRepository = new TimeOffRepository(read);
+        const timeOffService = new TimeOffService(timeOffRepository);
 
-        const receiverId = members.find((id) => id !== sender.id);
-        if (!receiverId) {
-            return;
-        }
+        const notifier = new AppNotifier(this, read);
 
-        const receiver: IUser = await read.getUserReader().getById(receiverId);
-
-        const timeOffEntry: ITimeOff | undefined = await TimeOffPersistence.findByUserId(read.getPersistenceReader(), receiver.id);
-
-        if (timeOffEntry && timeOffEntry.status === Status.IN_TIME_OFF) {
-            notifyUser(this, read, message.room, sender, timeOffEntry.message);
-        }
-
-        // SOLID Version
-        // const userRepository = new UserRepository(read);
-        // const timeOffService = new TimeOffService(read.getPersistenceReader());
-        // const notifier = new Notifier(modify);
-
-        // const handler = new PostMessageSentHandler(userRepository, timeOffService, notifier);
-        // await handler.handle(message);
+        const handler = new PostMessageSentHandler(userRepository, timeOffService, notifier);
+        await handler.handle(message);
     }
 
 }

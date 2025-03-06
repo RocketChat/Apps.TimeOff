@@ -1,7 +1,7 @@
 import { IRead, IModify } from "@rocket.chat/apps-engine/definition/accessors";
 import { SlashCommandContext } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { TimeOffApp } from "../../TimeOffApp";
-import { notifyUser } from "../../helpers/Util";
+import { AppNotifier } from "../../notifiers/AppNotifier";
 
 
 export async function helpCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead): Promise<void> {
@@ -14,5 +14,6 @@ export async function helpCommand(app: TimeOffApp, context: SlashCommandContext,
         `• \`/time-off end\` - End an existing time off\n` +
         `• \`/time-off help\` - Display this help message\n`;
 
-    await notifyUser(app, read, room, sender, message);
+    const notifier = new AppNotifier(app, read);
+    await notifier.notifyUser(room, sender, message);
 }

@@ -1,11 +1,11 @@
 import { IPersistence, IRead } from "@rocket.chat/apps-engine/definition/accessors";
 import { SlashCommandContext } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { TimeOffApp } from "../../TimeOffApp";
-import { notifyUser } from "../../helpers/Util";
 import { NOTIFICATION_MESSAGES } from "../../helpers/NotificationMessage";
-import { TimeOffPersistence } from "../../persistence/TimeOffPersistence";
-import { ITimeOff } from "../../definitions/TimeOff";
+import { ITimeOff } from "../../interfaces/ITimeOff";
 import { Status } from "../../enums/Status";
+import { AppNotifier } from "../../notifiers/AppNotifier";
+import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 
 export async function startCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead, persistence: IPersistence): Promise<void> {
     const currentUser = context.getSender();
@@ -22,11 +22,13 @@ export async function startCommand(app: TimeOffApp, context: SlashCommandContext
         message: message,
     };
 
-    TimeOffPersistence.persist(persistence,timeOffEntry);
+    const timeOffRepository = new TimeOffRepository(read);
+    timeOffRepository.save(persistence,timeOffEntry);
 
 
     const room = context.getRoom();
     const notificationMessage = NOTIFICATION_MESSAGES.started;
 
-    await notifyUser(app, read, room, currentUser, notificationMessage);
+    const notifier = new AppNotifier(this, read);
+    await notifier.notifyUser(room, currentUser, notificationMessage);
 }
