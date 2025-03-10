@@ -20,7 +20,7 @@ export class AppNotifier implements IAppNotifier {
         messageBuilder
                 .setRoom(room)
                 .setUsernameAlias(this.TimeOffName)
-                .setAvatarUrl(this.TimeOffEmojiAvatar);
+                .setEmojiAvatar(this.TimeOffEmojiAvatar);
 
         if (message) messageBuilder.setText(message);
         if (messageBlocks) messageBuilder.setBlocks(messageBlocks);
