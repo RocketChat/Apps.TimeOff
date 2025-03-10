@@ -7,4 +7,5 @@ export const NOTIFICATION_MESSAGES = {
     not_started: `You are not marked as Time Off. Use \`/time-off start\` to start your time off.`,
     status_in: `You are currently marked as Time Off. Your message is: `,
     status_out: `You are \`not\` marked as Time Off.`,
+    error: `An error occurred while updating your Time Off status. Please try again later.`,
 }

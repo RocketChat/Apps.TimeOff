@@ -1,6 +1,7 @@
 import {
     IAppAccessors,
     IConfigurationExtend,
+    IConfigurationModify,
     IEnvironmentRead,
     IHttp,
     ILogger,
@@ -18,6 +19,7 @@ import { TimeOffService } from './services/TimeOffService';
 import { AppNotifier } from './notifiers/AppNotifier';
 import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
 import { TimeOffRepository } from './repositories/TimeOffRepository';
+import { TimeOffCache } from './TimeOffCache';
 
 export class TimeOffApp extends App implements IPostMessageSent {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -26,6 +28,11 @@ export class TimeOffApp extends App implements IPostMessageSent {
 
     public async extendConfiguration(configuration: IConfigurationExtend, environmentRead: IEnvironmentRead): Promise<void> {
         configuration.slashCommands.provideSlashCommand(new TimeOffCommand(this));
+    }
+
+    public async onEnable(environmentRead: IEnvironmentRead, configurationModify: IConfigurationModify): Promise<boolean> {
+        TimeOffCache.getInstance().invalidateCache();
+        return Promise.resolve(true);
     }
 
     public async checkPostMessageSent?(message: IMessage, read: IRead, http: IHttp): Promise<boolean> {

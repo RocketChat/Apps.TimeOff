@@ -6,10 +6,12 @@ import { ITimeOff } from "../../interfaces/ITimeOff";
 import { Status } from "../../enums/Status";
 import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
+import { TimeOffService } from "../../services/TimeOffService";
 
 export async function startCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead, persistence: IPersistence): Promise<void> {
     const currentUser = context.getSender();
     let [_, message] = context.getArguments();
+    const notifier = new AppNotifier(this, read);
 
     if (!message) {
         message = NOTIFICATION_MESSAGES.default_reply_message;
@@ -23,12 +25,10 @@ export async function startCommand(app: TimeOffApp, context: SlashCommandContext
     };
 
     const timeOffRepository = new TimeOffRepository(read);
-    timeOffRepository.save(persistence,timeOffEntry);
-
+    const timeOffService = new TimeOffService(timeOffRepository);
+    const savedTimeOff = await timeOffService.saveTimeOff(persistence, timeOffEntry);
 
     const room = context.getRoom();
-    const notificationMessage = NOTIFICATION_MESSAGES.started;
-
-    const notifier = new AppNotifier(this, read);
+    const notificationMessage = !savedTimeOff ? NOTIFICATION_MESSAGES.error : NOTIFICATION_MESSAGES.started;
     await notifier.notifyUser(room, currentUser, notificationMessage);
 }

@@ -5,6 +5,7 @@ import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 import { TimeOffApp } from "../../TimeOffApp";
 import { Status } from "../../enums/Status";
+import { TimeOffService } from "../../services/TimeOffService";
 
 
 export async function statusCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead, persistence: IPersistence): Promise<void> {
@@ -13,7 +14,8 @@ export async function statusCommand(app: TimeOffApp, context: SlashCommandContex
     const notifier = new AppNotifier(this, read);
 
     const timeOffRepository = new TimeOffRepository(read);
-    let timeOffEntry = await timeOffRepository.findByUserId(currentUser.id);
+    const timeOffService = new TimeOffService(timeOffRepository);
+    const timeOffEntry = await timeOffService.getTimeOffByUserId(currentUser.id);
 
     let notificationMessage = '';
 
@@ -28,7 +30,6 @@ export async function statusCommand(app: TimeOffApp, context: SlashCommandContex
     } else {
         notificationMessage = `${NOTIFICATION_MESSAGES.status_out}`;
     }
-
 
     await notifier.notifyUser(room, currentUser, notificationMessage);
 }

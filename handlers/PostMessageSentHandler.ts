@@ -4,6 +4,7 @@ import { Status } from "../enums/Status";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { ITimeOffService } from "../services/ITimeOffService";
 import { IAppNotifier } from "../notifiers/IAppNotifier";
+import { TimeOffApp } from "../TimeOffApp";
 
 export class PostMessageSentHandler {
     constructor(
