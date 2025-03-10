@@ -5,6 +5,7 @@ import { IUserRepository } from "../repositories/IUserRepository";
 import { ITimeOffService } from "../services/ITimeOffService";
 import { IAppNotifier } from "../notifiers/IAppNotifier";
 import { TimeOffApp } from "../TimeOffApp";
+import { LayoutBlock } from "@rocket.chat/ui-kit";
 
 export class PostMessageSentHandler {
     constructor(
@@ -22,7 +23,7 @@ export class PostMessageSentHandler {
         const timeOffEntry = await this.timeOffService.getTimeOffByUserId(receiver.id);
 
         if (timeOffEntry?.status === Status.IN_TIME_OFF) {
-            this.notifier.notifyUser(message.room, sender, timeOffEntry.message);
+            this.notifier.notifyUser(message.room, sender, timeOffEntry.message, this.timeOffMessage(sender.username, timeOffEntry.message));
         }
     }
 
@@ -31,5 +32,25 @@ export class PostMessageSentHandler {
         const receiverId = members.find((id) => id !== sender.id);
 
         return receiverId ? this.userRepository.getById(receiverId) : null;
+    }
+
+    private timeOffMessage(username: string, message: string): LayoutBlock[] {
+        return [
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: `${username} is currently *unavailable* to answer your message, however they left the following message:\n\n`
+                }
+            },
+            {
+                type: "preview",
+                title: [],
+                description: [{
+                    type: "mrkdwn",
+                    text: message
+                }]
+            }
+        ];
     }
 }
