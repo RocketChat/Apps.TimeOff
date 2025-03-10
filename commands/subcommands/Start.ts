@@ -7,10 +7,12 @@ import { Status } from "../../enums/Status";
 import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 import { TimeOffService } from "../../services/TimeOffService";
+import { CommandEnum } from "../../enums/CommandEnum";
 
 export async function startCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead, persistence: IPersistence): Promise<void> {
     const currentUser = context.getSender();
-    let [_, message] = context.getArguments();
+    // remove the command from the message and then join other arguments
+    let message = context.getArguments().join(' ').replace(CommandEnum.START, '');
     const notifier = new AppNotifier(this, read);
 
     if (!message) {
