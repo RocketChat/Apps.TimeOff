@@ -23,7 +23,7 @@ export class PostMessageSentHandler {
         const timeOffEntry = await this.timeOffService.getTimeOffByUserId(receiver.id);
 
         if (timeOffEntry?.status === Status.IN_TIME_OFF) {
-            this.notifier.notifyUser(message.room, sender, timeOffEntry.message, this.timeOffMessage(sender.username, timeOffEntry.message));
+            this.notifier.notifyUser(message.room, sender, timeOffEntry.message, this.timeOffMessage(receiver.username, timeOffEntry.message));
         }
     }
 
