@@ -19,8 +19,7 @@ export class AppNotifier implements IAppNotifier {
         const messageBuilder = notifier.getMessageBuilder();
         messageBuilder
                 .setRoom(room)
-                .setUsernameAlias(this.TimeOffName)
-                .setEmojiAvatar(this.TimeOffEmojiAvatar);
+                .setUsernameAlias(this.TimeOffName);
 
         if (message) messageBuilder.setText(message);
         if (messageBlocks) messageBuilder.setBlocks(messageBlocks);
