@@ -13,7 +13,7 @@ export async function endCommand(app: TimeOffApp, context: SlashCommandContext, 
     const room = context.getRoom();
     const notifier = new AppNotifier(this, read);
 
-    const timeOffRepository = new TimeOffRepository(read);
+    const timeOffRepository = new TimeOffRepository(read, persistence);
     const timeOffService = new TimeOffService(timeOffRepository);
     const timeOffEntry = await timeOffService.getTimeOffByUserId(currentUser.id);
 
@@ -26,7 +26,7 @@ export async function endCommand(app: TimeOffApp, context: SlashCommandContext, 
     }
 
     timeOffEntry.status = TimeOffStatus.OFF_TIME_OFF;
-    const savedTimeOff = await timeOffService.saveTimeOff(persistence, timeOffEntry);
+    const savedTimeOff = await timeOffService.saveTimeOff(timeOffEntry);
 
     if (!savedTimeOff) {
         notificationMessage = NOTIFICATION_MESSAGES.error;

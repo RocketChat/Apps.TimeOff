@@ -43,7 +43,7 @@ export class TimeOffApp extends App implements IPostMessageSent {
     public async executePostMessageSent(message: IMessage, read: IRead, http: IHttp, persistence: IPersistence, modify: IModify): Promise<void> {
         const userRepository = new UserRepository(read);
 
-        const timeOffRepository = new TimeOffRepository(read);
+        const timeOffRepository = new TimeOffRepository(read, persistence);
         const timeOffService = new TimeOffService(timeOffRepository);
 
         const notifier = new AppNotifier(this, read);

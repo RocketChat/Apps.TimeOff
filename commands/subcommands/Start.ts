@@ -26,9 +26,9 @@ export async function startCommand(app: TimeOffApp, context: SlashCommandContext
         message: message,
     };
 
-    const timeOffRepository = new TimeOffRepository(read);
+    const timeOffRepository = new TimeOffRepository(read, persistence);
     const timeOffService = new TimeOffService(timeOffRepository);
-    const savedTimeOff = await timeOffService.saveTimeOff(persistence, timeOffEntry);
+    const savedTimeOff = await timeOffService.saveTimeOff(timeOffEntry);
 
     const room = context.getRoom();
     const notificationMessage = !savedTimeOff ? NOTIFICATION_MESSAGES.error : NOTIFICATION_MESSAGES.started;

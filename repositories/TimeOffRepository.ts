@@ -1,11 +1,13 @@
-import { IRead } from "@rocket.chat/apps-engine/definition/accessors";
-import { IPersistence } from "@rocket.chat/apps-engine/definition/accessors";
+import { IRead, IPersistence } from "@rocket.chat/apps-engine/definition/accessors";
 import { RocketChatAssociationRecord, RocketChatAssociationModel } from "@rocket.chat/apps-engine/definition/metadata";
 import { ITimeOff } from "../interfaces/ITimeOff";
 import { ITimeOffRepository } from "./ITimeOffRepository";
 
 export class TimeOffRepository implements ITimeOffRepository {
-    constructor(private readonly read: IRead) {}
+    constructor(
+        private readonly read: IRead,
+        private readonly persistence: IPersistence // Injected via constructor
+    ) {}
 
     private createAssociations(coreUserId: string): RocketChatAssociationRecord[] {
         return [
@@ -14,9 +16,13 @@ export class TimeOffRepository implements ITimeOffRepository {
         ];
     }
 
-    public async save(persistence: IPersistence, timeOff: ITimeOff): Promise<boolean> {
+    public async save(timeOff: ITimeOff): Promise<boolean> {
         try {
-            await persistence.updateByAssociations(this.createAssociations(timeOff.coreUserId), { ...timeOff }, true);
+            await this.persistence.updateByAssociations(
+                this.createAssociations(timeOff.coreUserId),
+                { ...timeOff },
+                true
+            );
             return true;
         } catch (err) {
             console.warn("[TimeOffRepository] Error saving time off:", err);

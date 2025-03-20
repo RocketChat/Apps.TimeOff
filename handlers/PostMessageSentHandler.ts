@@ -15,8 +15,9 @@ export class PostMessageSentHandler {
 
     public async handle(message: IMessage): Promise<void> {
         const sender = await this.userRepository.getById(message.sender.id);
-        const receiver = await this.getReceiver(message, sender);
+        if (!sender) return;
 
+        const receiver = await this.getReceiver(message, sender);
         if (!receiver) return;
 
         const timeOffEntry = await this.timeOffService.getTimeOffByUserId(receiver.id);
@@ -26,11 +27,11 @@ export class PostMessageSentHandler {
         }
     }
 
-    private async getReceiver(message: IMessage, sender: IUser): Promise<IUser | null> {
+    private async getReceiver(message: IMessage, sender: IUser): Promise<IUser | undefined> {
         const members = message.room.userIds || [];
         const receiverId = members.find((id) => id !== sender.id);
 
-        return receiverId ? this.userRepository.getById(receiverId) : null;
+        return receiverId ? await this.userRepository.getById(receiverId) : undefined;
     }
 
     private timeOffMessage(username: string, message: string): LayoutBlock[] {
