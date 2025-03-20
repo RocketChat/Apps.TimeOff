@@ -3,7 +3,7 @@ import { SlashCommandContext } from "@rocket.chat/apps-engine/definition/slashco
 import { TimeOffApp } from "../../TimeOffApp";
 import { NOTIFICATION_MESSAGES } from "../../helpers/NotificationMessage";
 import { ITimeOff } from "../../interfaces/ITimeOff";
-import { Status } from "../../enums/Status";
+import { TimeOffStatus } from "../../enums/Status";
 import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 import { TimeOffService } from "../../services/TimeOffService";
@@ -22,7 +22,7 @@ export async function startCommand(app: TimeOffApp, context: SlashCommandContext
     const timeOffEntry: ITimeOff = {
         coreUserId: currentUser.id,
         username: currentUser.username,
-        status: Status.IN_TIME_OFF,
+        status: TimeOffStatus.ON_TIME_OFF,
         message: message,
     };
 

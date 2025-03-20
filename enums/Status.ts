@@ -1,4 +1,4 @@
-export enum Status {
-    IN_TIME_OFF = 'IN_TIME_OFF',
-    OUT_TIME_OFF = 'OUT_OF_TIME_OFF',
+export enum TimeOffStatus {
+    ON_TIME_OFF = 'ON_TIME_OFF',
+    OFF_TIME_OFF = 'OFF_TIME_OFF',
 }

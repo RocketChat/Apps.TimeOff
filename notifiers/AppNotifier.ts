@@ -1,4 +1,4 @@
-import { IModify, IRead } from "@rocket.chat/apps-engine/definition/accessors";
+import { IRead } from "@rocket.chat/apps-engine/definition/accessors";
 import { IRoom } from "@rocket.chat/apps-engine/definition/rooms";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
 import { IAppNotifier } from "./IAppNotifier";
@@ -7,7 +7,6 @@ import { TimeOffApp } from "../TimeOffApp";
 
 export class AppNotifier implements IAppNotifier {
     private readonly TimeOffName: string = 'TimeOff Bot';
-    private readonly TimeOffEmojiAvatar: string = ':sunrise:';
 
     constructor(
         private readonly app: TimeOffApp,

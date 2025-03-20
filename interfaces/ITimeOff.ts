@@ -1,10 +1,10 @@
-import { Status } from "../enums/Status";
+import { TimeOffStatus } from "../enums/Status";
 
 export interface ITimeOff {
     coreUserId: string;
     username: string;
     message: string;
-    status: Status;
+    status: TimeOffStatus;
     startAt?: Date;
     endAt?: Date;
 }

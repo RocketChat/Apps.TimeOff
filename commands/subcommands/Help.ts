@@ -1,4 +1,4 @@
-import { IRead, IModify } from "@rocket.chat/apps-engine/definition/accessors";
+import { IRead } from "@rocket.chat/apps-engine/definition/accessors";
 import { SlashCommandContext } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { TimeOffApp } from "../../TimeOffApp";
 import { AppNotifier } from "../../notifiers/AppNotifier";

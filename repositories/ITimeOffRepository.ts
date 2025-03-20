@@ -1,4 +1,4 @@
-import { IPersistence, IPersistenceRead } from "@rocket.chat/apps-engine/definition/accessors";
+import { IPersistence } from "@rocket.chat/apps-engine/definition/accessors";
 import { ITimeOff } from "../interfaces/ITimeOff";
 
 export interface ITimeOffRepository {

@@ -2,7 +2,6 @@ import { IPersistence } from "@rocket.chat/apps-engine/definition/accessors";
 import { ITimeOff } from "../interfaces/ITimeOff";
 import { ITimeOffRepository } from "../repositories/ITimeOffRepository";
 import { TimeOffCache } from "../TimeOffCache";
-import { TimeOffApp } from "../TimeOffApp";
 
 export class TimeOffService {
     constructor(private readonly timeOffRepository: ITimeOffRepository) {}

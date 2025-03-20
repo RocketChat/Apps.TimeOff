@@ -1,10 +1,9 @@
 import { IMessage } from "@rocket.chat/apps-engine/definition/messages";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
-import { Status } from "../enums/Status";
+import { TimeOffStatus } from "../enums/Status";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { ITimeOffService } from "../services/ITimeOffService";
 import { IAppNotifier } from "../notifiers/IAppNotifier";
-import { TimeOffApp } from "../TimeOffApp";
 import { LayoutBlock } from "@rocket.chat/ui-kit";
 
 export class PostMessageSentHandler {
@@ -22,7 +21,7 @@ export class PostMessageSentHandler {
 
         const timeOffEntry = await this.timeOffService.getTimeOffByUserId(receiver.id);
 
-        if (timeOffEntry?.status === Status.IN_TIME_OFF) {
+        if (timeOffEntry?.status === TimeOffStatus.ON_TIME_OFF) {
             this.notifier.notifyUser(message.room, sender, timeOffEntry.message, this.timeOffMessage(receiver.username, timeOffEntry.message));
         }
     }

@@ -1,11 +1,11 @@
 import { IRead } from "@rocket.chat/apps-engine/definition/accessors";
-import { IPersistence, IPersistenceRead } from "@rocket.chat/apps-engine/definition/accessors";
+import { IPersistence } from "@rocket.chat/apps-engine/definition/accessors";
 import { RocketChatAssociationRecord, RocketChatAssociationModel } from "@rocket.chat/apps-engine/definition/metadata";
 import { ITimeOff } from "../interfaces/ITimeOff";
 import { ITimeOffRepository } from "./ITimeOffRepository";
 
 export class TimeOffRepository implements ITimeOffRepository {
-    constructor(private readonly read: IRead) {} // Agora armazenamos `read`
+    constructor(private readonly read: IRead) {}
 
     private createAssociations(coreUserId: string): RocketChatAssociationRecord[] {
         return [

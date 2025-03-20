@@ -4,7 +4,7 @@ import { NOTIFICATION_MESSAGES } from "../../helpers/NotificationMessage";
 import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 import { TimeOffApp } from "../../TimeOffApp";
-import { Status } from "../../enums/Status";
+import { TimeOffStatus } from "../../enums/Status";
 import { TimeOffService } from "../../services/TimeOffService";
 
 
@@ -25,7 +25,7 @@ export async function statusCommand(app: TimeOffApp, context: SlashCommandContex
         return;
     }
 
-    if (timeOffEntry.status === Status.IN_TIME_OFF) {
+    if (timeOffEntry.status === TimeOffStatus.ON_TIME_OFF) {
         notificationMessage = `${NOTIFICATION_MESSAGES.status_in}${timeOffEntry.message}`;
     } else {
         notificationMessage = `${NOTIFICATION_MESSAGES.status_out}`;
