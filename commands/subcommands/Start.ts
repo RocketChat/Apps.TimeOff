@@ -8,13 +8,14 @@ import { AppNotifier } from "../../notifiers/AppNotifier";
 import { TimeOffRepository } from "../../repositories/TimeOffRepository";
 import { TimeOffService } from "../../services/TimeOffService";
 import { CommandEnum } from "../../enums/CommandEnum";
+import { RocketChatAssociationRecord, RocketChatAssociationModel } from "@rocket.chat/apps-engine/definition/metadata";
 
 export async function startCommand(app: TimeOffApp, context: SlashCommandContext, read: IRead, persistence: IPersistence): Promise<void> {
     const currentUser = context.getSender();
-    // remove the command from the message and then join other arguments
-    let message = context.getArguments().join(' ').replace(CommandEnum.START, '');
+    const room = context.getRoom();
     const notifier = new AppNotifier(this, read);
 
+    let message = context.getArguments().join(' ').replace(CommandEnum.START, '');
     if (!message) {
         message = NOTIFICATION_MESSAGES.default_reply_message;
     }
@@ -26,11 +27,10 @@ export async function startCommand(app: TimeOffApp, context: SlashCommandContext
         message: message,
     };
 
-    const timeOffRepository = new TimeOffRepository(read, persistence);
+    const timeOffRepository = new TimeOffRepository(app, read, persistence);
     const timeOffService = new TimeOffService(timeOffRepository);
     const savedTimeOff = await timeOffService.saveTimeOff(timeOffEntry);
 
-    const room = context.getRoom();
     const notificationMessage = !savedTimeOff ? NOTIFICATION_MESSAGES.error : NOTIFICATION_MESSAGES.started;
     await notifier.notifyUser(room, currentUser, notificationMessage);
 }

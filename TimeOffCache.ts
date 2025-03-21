@@ -3,7 +3,7 @@ import { ITimeOff } from "./interfaces/ITimeOff";
 export class TimeOffCache {
     private static instance: TimeOffCache;
     private cache: Map<string, { data: ITimeOff; expiresAt: number }>;
-    private TTL = 30 * 60 * 1000; // 30 minutes cache
+    private TTL = 60 * 60 * 1000; // 1 hour cache
 
     private constructor() {
         this.cache = new Map();

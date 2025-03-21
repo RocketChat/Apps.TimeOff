@@ -2,11 +2,13 @@ import { IRead, IPersistence } from "@rocket.chat/apps-engine/definition/accesso
 import { RocketChatAssociationRecord, RocketChatAssociationModel } from "@rocket.chat/apps-engine/definition/metadata";
 import { ITimeOff } from "../interfaces/ITimeOff";
 import { ITimeOffRepository } from "./ITimeOffRepository";
+import { TimeOffApp } from "../TimeOffApp";
 
 export class TimeOffRepository implements ITimeOffRepository {
     constructor(
+        private readonly app: TimeOffApp,
         private readonly read: IRead,
-        private readonly persistence: IPersistence // Injected via constructor
+        private readonly persistence: IPersistence
     ) {}
 
     private createAssociations(coreUserId: string): RocketChatAssociationRecord[] {
@@ -25,7 +27,7 @@ export class TimeOffRepository implements ITimeOffRepository {
             );
             return true;
         } catch (err) {
-            console.warn("[TimeOffRepository] Error saving time off:", err);
+            this.app.getLogger().error("[TimeOffRepository] Error saving time off:", err);
             return false;
         }
     }
@@ -37,7 +39,7 @@ export class TimeOffRepository implements ITimeOffRepository {
             )) as ITimeOff[];
             return data.length > 0 ? data[0] : undefined;
         } catch (err) {
-            console.warn("[TimeOffRepository] Error fetching time off:", err);
+            this.app.getLogger().error("[TimeOffRepository] Error fetching time off:", err);
             return undefined;
         }
     }

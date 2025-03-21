@@ -20,6 +20,7 @@ import { AppNotifier } from './notifiers/AppNotifier';
 import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
 import { TimeOffRepository } from './repositories/TimeOffRepository';
 import { TimeOffCache } from './TimeOffCache';
+import { UserService } from './services/UserService';
 
 export class TimeOffApp extends App implements IPostMessageSent {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -42,13 +43,14 @@ export class TimeOffApp extends App implements IPostMessageSent {
 
     public async executePostMessageSent(message: IMessage, read: IRead, http: IHttp, persistence: IPersistence, modify: IModify): Promise<void> {
         const userRepository = new UserRepository(read);
+        const userService = new UserService(userRepository);
 
-        const timeOffRepository = new TimeOffRepository(read, persistence);
+        const timeOffRepository = new TimeOffRepository(this, read, persistence);
         const timeOffService = new TimeOffService(timeOffRepository);
 
         const notifier = new AppNotifier(this, read);
 
-        const handler = new PostMessageSentHandler(this, userRepository, timeOffService, notifier);
+        const handler = new PostMessageSentHandler(this, userService, timeOffService, notifier);
         await handler.handle(message);
     }
 

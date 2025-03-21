@@ -20,23 +20,23 @@ export class TimeOffCommand implements ISlashCommand {
         const [command, ...params] = context.getArguments();
 
         if (!command) {
-            helpCommand(this.app, context, read);
+            await helpCommand(this.app, context, read);
             return;
         }
 
         switch (command) {
             case CommandEnum.START:
-                startCommand(this.app, context, read, persistence);
+                await startCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.END:
-                endCommand(this.app, context, read, persistence);
+                await endCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.STATUS:
-                statusCommand(this.app, context, read, persistence);
+                await statusCommand(this.app, context, read, persistence);
                 break;
             case CommandEnum.HELP:
             default:
-                helpCommand(this.app, context, read);
+                await helpCommand(this.app, context, read);
                 break;
         }
     }

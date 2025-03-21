@@ -13,7 +13,7 @@ export async function endCommand(app: TimeOffApp, context: SlashCommandContext, 
     const room = context.getRoom();
     const notifier = new AppNotifier(this, read);
 
-    const timeOffRepository = new TimeOffRepository(read, persistence);
+    const timeOffRepository = new TimeOffRepository(app, read, persistence);
     const timeOffService = new TimeOffService(timeOffRepository);
     const timeOffEntry = await timeOffService.getTimeOffByUserId(currentUser.id);
 
