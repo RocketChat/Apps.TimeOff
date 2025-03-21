@@ -5,9 +5,11 @@ import { IUserRepository } from "../repositories/IUserRepository";
 import { ITimeOffService } from "../services/ITimeOffService";
 import { IAppNotifier } from "../notifiers/IAppNotifier";
 import { LayoutBlock } from "@rocket.chat/ui-kit";
+import { TimeOffApp } from "../TimeOffApp";
 
 export class PostMessageSentHandler {
     constructor(
+        private readonly app: TimeOffApp,
         private readonly userRepository: IUserRepository,
         private readonly timeOffService: ITimeOffService,
         private readonly notifier: IAppNotifier
@@ -15,10 +17,16 @@ export class PostMessageSentHandler {
 
     public async handle(message: IMessage): Promise<void> {
         const sender = await this.userRepository.getById(message.sender.id);
-        if (!sender) return;
+        if (!sender) {
+            this.app.getLogger().error("[PostMessageSentHandler] Sender not found for message:", message);
+            return;
+        }
 
         const receiver = await this.getReceiver(message, sender);
-        if (!receiver) return;
+        if (!receiver) {
+            this.app.getLogger().error("[PostMessageSentHandler] Receiver not found for message:", message);
+            return;
+        }
 
         const timeOffEntry = await this.timeOffService.getTimeOffByUserId(receiver.id);
 

@@ -48,7 +48,7 @@ export class TimeOffApp extends App implements IPostMessageSent {
 
         const notifier = new AppNotifier(this, read);
 
-        const handler = new PostMessageSentHandler(userRepository, timeOffService, notifier);
+        const handler = new PostMessageSentHandler(this, userRepository, timeOffService, notifier);
         await handler.handle(message);
     }
 
