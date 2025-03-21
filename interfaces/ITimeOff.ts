@@ -5,6 +5,4 @@ export interface ITimeOff {
     username: string;
     message: string;
     status: TimeOffStatus;
-    startAt?: Date;
-    endAt?: Date;
 }
