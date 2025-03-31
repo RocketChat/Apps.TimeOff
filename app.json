@@ -11,7 +11,7 @@
     "name": "TimeOff",
     "nameSlug": "timeoff",
     "classFile": "TimeOffApp.ts",
-    "description": "Automatically notifies others that you're currently on time off",
+    "description": "The TimeOffApp for Rocket.Chat helps teams stay informed and organized by managing user availability during time off. It automatically notifies colleagues in direct messages when a recipient is unavailable, displaying a personalized message left by the user. This ensures clear communication and minimizes disruptions in the workflow.",
     "implements": [
         "IPostMessageSent"
     ]
