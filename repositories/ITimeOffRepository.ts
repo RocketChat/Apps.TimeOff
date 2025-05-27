@@ -1,6 +1,6 @@
-import { ITimeOff } from "../interfaces/ITimeOff";
+import { ITimeOff } from '../interfaces/ITimeOff';
 
 export interface ITimeOffRepository {
-    save(timeOff: ITimeOff): Promise<boolean>;
-    findByUserId(coreUserId: string): Promise<ITimeOff | undefined>;
+	save(timeOff: ITimeOff): Promise<boolean>;
+	findByUserId(coreUserId: string): Promise<ITimeOff | undefined>;
 }

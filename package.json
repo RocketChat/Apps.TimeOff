@@ -2,11 +2,25 @@
     "devDependencies": {
         "@rocket.chat/apps-engine": "^1.44.0",
         "@types/node": "14.14.6",
-        "tslint": "^5.10.0",
-        "typescript": "^5.6.2"
+        "@typescript-eslint/eslint-plugin": "^5.4.0",
+		"@typescript-eslint/parser": "^5.4.0",
+        "typescript": "^5.6.2",
+        "husky": "^7.0.4",
+		"prettier": "^2.0.5",
+		"prettier-eslint": "^13.0.0",
+        "eslint": "^8.3.0",
+		"eslint-plugin-unused-imports": "^2.0.0"
     },
     "dependencies": {
       	"@rocket.chat/icons": "^0.38.0",
         "@rocket.chat/ui-kit": "^0.36.1"
-    }
+    },
+	"scripts": {
+		"prepare": "husky install",
+		"typecheck": "tsc --noEmit --skipLibCheck",
+		"lint": "eslint -c .eslintrc.js --ext .ts .",
+		"lint-and-fix": "eslint . --ext .ts --fix",
+		"prettier-format": "prettier --config .prettierrc '**.ts' --write",
+		"prettier-check": "prettier --config .prettierrc '**.ts' --check"
+	}
 }
