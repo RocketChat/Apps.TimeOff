@@ -14,6 +14,7 @@ import { IAppInfo } from '@rocket.chat/apps-engine/definition/metadata';
 import { TimeOffCommand } from './commands/TimeOffCommand';
 import { IMessage, IPostMessageSent } from '@rocket.chat/apps-engine/definition/messages';
 import { RoomType } from '@rocket.chat/apps-engine/definition/rooms';
+import { SettingType } from '@rocket.chat/apps-engine/definition/settings';
 import { UserRepository } from './repositories/UserRepository';
 import { TimeOffService } from './services/TimeOffService';
 import { AppNotifier } from './notifiers/AppNotifier';
@@ -21,6 +22,7 @@ import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
 import { TimeOffRepository } from './repositories/TimeOffRepository';
 import { TimeOffCache } from './TimeOffCache';
 import { UserService } from './services/UserService';
+import { APP_SETTINGS, DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS } from './helpers/AppSettings';
 
 export class TimeOffApp extends App implements IPostMessageSent {
 	constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -32,6 +34,15 @@ export class TimeOffApp extends App implements IPostMessageSent {
 		_environmentRead: IEnvironmentRead,
 	): Promise<void> {
 		configuration.slashCommands.provideSlashCommand(new TimeOffCommand(this));
+		await configuration.settings.provideSetting({
+			id: APP_SETTINGS.TIME_OFF_REPLY_COOLDOWN_HOURS,
+			type: SettingType.NUMBER,
+			packageValue: DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS,
+			required: false,
+			public: true,
+			i18nLabel: 'TimeOff Reply Cooldown (hours)',
+			i18nDescription: 'Hours to wait before sending another TimeOff message to the same sender.',
+		});
 	}
 
 	public async onEnable(
@@ -61,8 +72,24 @@ export class TimeOffApp extends App implements IPostMessageSent {
 		const timeOffService = new TimeOffService(timeOffRepository);
 
 		const notifier = new AppNotifier(this, read);
+		const cooldownHours = await this.getTimeOffReplyCooldownHours(read);
 
-		const handler = new PostMessageSentHandler(this, userService, timeOffService, notifier);
+		const handler = new PostMessageSentHandler(this, userService, timeOffService, notifier, cooldownHours);
 		await handler.handle(message);
+	}
+
+	private async getTimeOffReplyCooldownHours(read: IRead): Promise<number> {
+		try {
+			const settingValue = await read.getEnvironmentReader().getSettings().getValueById(APP_SETTINGS.TIME_OFF_REPLY_COOLDOWN_HOURS);
+			const parsedSettingValue = Number(settingValue);
+
+			if (Number.isFinite(parsedSettingValue) && parsedSettingValue >= 0) {
+				return parsedSettingValue;
+			}
+		} catch (error) {
+			this.getLogger().error('[TimeOffApp] Error while reading time-off reply cooldown setting:', error);
+		}
+
+		return DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS;
 	}
 }
