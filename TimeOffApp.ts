@@ -22,7 +22,11 @@ import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
 import { TimeOffRepository } from './repositories/TimeOffRepository';
 import { TimeOffCache } from './TimeOffCache';
 import { UserService } from './services/UserService';
-import { APP_SETTINGS, DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS } from './helpers/AppSettings';
+import {
+	APP_SETTINGS,
+	DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS,
+	MIN_TIME_OFF_REPLY_COOLDOWN_HOURS,
+} from './helpers/AppSettings';
 
 export class TimeOffApp extends App implements IPostMessageSent {
 	constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -41,7 +45,7 @@ export class TimeOffApp extends App implements IPostMessageSent {
 			required: false,
 			public: true,
 			i18nLabel: 'TimeOff Reply Cooldown (hours)',
-			i18nDescription: 'Hours to wait before sending another TimeOff message to the same sender.',
+			i18nDescription: `Hours to wait before sending another TimeOff message to the same sender. Minimum: ${MIN_TIME_OFF_REPLY_COOLDOWN_HOURS}.`,
 		});
 	}
 
@@ -80,11 +84,14 @@ export class TimeOffApp extends App implements IPostMessageSent {
 
 	private async getTimeOffReplyCooldownHours(read: IRead): Promise<number> {
 		try {
-			const settingValue = await read.getEnvironmentReader().getSettings().getValueById(APP_SETTINGS.TIME_OFF_REPLY_COOLDOWN_HOURS);
+			const settingValue = await read
+				.getEnvironmentReader()
+				.getSettings()
+				.getValueById(APP_SETTINGS.TIME_OFF_REPLY_COOLDOWN_HOURS);
 			const parsedSettingValue = Number(settingValue);
 
-			if (Number.isFinite(parsedSettingValue) && parsedSettingValue >= 0) {
-				return parsedSettingValue;
+			if (Number.isFinite(parsedSettingValue)) {
+				return Math.max(parsedSettingValue, MIN_TIME_OFF_REPLY_COOLDOWN_HOURS);
 			}
 		} catch (error) {
 			this.getLogger().error('[TimeOffApp] Error while reading time-off reply cooldown setting:', error);

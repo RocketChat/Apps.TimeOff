@@ -54,7 +54,12 @@ export class PostMessageSentHandler {
 		return await this.userService.getUserById(receiverId);
 	}
 
-	private async notifySender(message: IMessage, sender: IUser, receiver: IUser, timeOffMessage: string): Promise<void> {
+	private async notifySender(
+		message: IMessage,
+		sender: IUser,
+		receiver: IUser,
+		timeOffMessage: string,
+	): Promise<void> {
 		const formattedMessage = TimeOffMessageFormatter.format(receiver.username, timeOffMessage);
 		await this.notifier.notifyUser(message.room, sender, timeOffMessage, formattedMessage);
 	}
@@ -94,10 +99,7 @@ export class PostMessageSentHandler {
 		}
 	}
 
-	private cleanupExpiredNotifications(
-		notifications: Record<string, number>,
-		now: number,
-	): Record<string, number> {
+	private cleanupExpiredNotifications(notifications: Record<string, number>, now: number): Record<string, number> {
 		const cooldownMs = this.notificationCooldownHours * MILLISECONDS_PER_HOUR;
 
 		return Object.keys(notifications).reduce<Record<string, number>>((acc, senderId) => {
