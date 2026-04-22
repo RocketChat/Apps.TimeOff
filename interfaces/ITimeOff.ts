@@ -5,4 +5,5 @@ export interface ITimeOff {
 	username: string;
 	message: string;
 	status: TimeOffStatus;
+	lastNotifiedAtBySenderId?: Record<string, number>;
 }
