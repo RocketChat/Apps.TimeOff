@@ -17,7 +17,7 @@ export async function startCommand(
 ): Promise<void> {
 	const currentUser = context.getSender();
 	const room = context.getRoom();
-	const notifier = new AppNotifier(this, read);
+	const notifier = new AppNotifier(app, read);
 
 	let message = context.getArguments().join(' ').replace(CommandEnum.START, '');
 	if (!message) {
@@ -29,6 +29,7 @@ export async function startCommand(
 		username: currentUser.username,
 		status: TimeOffStatus.ON_TIME_OFF,
 		message: message,
+		lastNotifiedAtBySenderId: {},
 	};
 
 	const timeOffRepository = new TimeOffRepository(app, read, persistence);

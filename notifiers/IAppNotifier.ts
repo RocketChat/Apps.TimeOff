@@ -3,5 +3,5 @@ import { IUser } from '@rocket.chat/apps-engine/definition/users';
 import { LayoutBlock } from '@rocket.chat/ui-kit';
 
 export interface IAppNotifier {
-	notifyUser(room: IRoom, sender: IUser, message?: string, messageBlocks?: LayoutBlock[]): void;
+	notifyUser(room: IRoom, sender: IUser, message?: string, messageBlocks?: LayoutBlock[]): Promise<void>;
 }
