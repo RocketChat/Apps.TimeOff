@@ -20,7 +20,6 @@ import { TimeOffService } from './services/TimeOffService';
 import { AppNotifier } from './notifiers/AppNotifier';
 import { PostMessageSentHandler } from './handlers/PostMessageSentHandler';
 import { TimeOffRepository } from './repositories/TimeOffRepository';
-import { TimeOffCache } from './TimeOffCache';
 import { UserService } from './services/UserService';
 import { APP_SETTINGS, DEFAULT_TIME_OFF_REPLY_COOLDOWN_HOURS } from './helpers/AppSettings';
 
@@ -49,7 +48,6 @@ export class TimeOffApp extends App implements IPostMessageSent {
 		_environmentRead: IEnvironmentRead,
 		_configurationModify: IConfigurationModify,
 	): Promise<boolean> {
-		TimeOffCache.getInstance().invalidateCache();
 		return Promise.resolve(true);
 	}
 
