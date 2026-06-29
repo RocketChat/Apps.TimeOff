@@ -4,6 +4,6 @@ export const NOTIFICATION_MESSAGES = {
 	ended: `Welcome back! You are no longer marked as Time Off.`,
 	not_started: `*Time-off off*\nI will not automatically reply to any direct messages you receive.`,
 	status_in: `You are currently marked as Time Off. Your message is: `,
-	status_out: `You are \`not\` marked as Time Off.`,
+	status_out: `*Time-off off*\nI will not automatically reply to any direct messages you receive.`,
 	error: `An error occurred while updating your Time Off status. Please try again later.`,
 };
