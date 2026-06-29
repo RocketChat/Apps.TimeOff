@@ -9,8 +9,8 @@ import { statusCommand } from './subcommands/Status';
 
 export class TimeOffCommand implements ISlashCommand {
 	public command = 'time-off';
-	public i18nParamsExample = '';
-	public i18nDescription = '';
+	public i18nParamsExample = 'Time_Off_Command_Params_Example';
+	public i18nDescription = 'Time_Off_Command_Description';
 	public providesPreview = false;
 
 	constructor(private readonly app: TimeOffApp) {}

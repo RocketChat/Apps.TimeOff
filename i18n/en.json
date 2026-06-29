@@ -1,0 +1,4 @@
+{
+	"Time_Off_Command_Description": "Manage your time off — start, end, or check your status",
+	"Time_Off_Command_Params_Example": "start | end | status | help"
+}
