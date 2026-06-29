@@ -8,7 +8,7 @@ export async function helpCommand(app: TimeOffApp, context: SlashCommandContext,
 	const room = context.getRoom();
 
 	const message =
-		`*Time-Off Help*\n\n` +
+		`*Time-off Help*\n\n` +
 		`*Commands*\n` +
 		`• \`/time-off start\` starts new time off period\n` +
 		`• \`/time-off start [message]\` start a new time off period with a custom message\n` +

@@ -6,7 +6,7 @@ import { LayoutBlock } from '@rocket.chat/ui-kit';
 import { TimeOffApp } from '../TimeOffApp';
 
 export class AppNotifier implements IAppNotifier {
-	private readonly TimeOffName: string = 'Time-Off';
+	private readonly TimeOffName: string = 'Time-off';
 
 	constructor(private readonly app: TimeOffApp, private readonly read: IRead) {}
 
