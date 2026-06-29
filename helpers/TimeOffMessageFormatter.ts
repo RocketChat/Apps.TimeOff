@@ -11,14 +11,14 @@ export class TimeOffMessageFormatter {
 				},
 			},
 			{
-				type: 'preview',
-				title: [],
-				description: [
-					{
-						type: 'mrkdwn',
-						text: message,
-					},
-				],
+				type: 'section',
+				text: {
+					type: 'mrkdwn',
+					text: message
+						.split('\n')
+						.map((line) => `> ${line}`)
+						.join('\n'),
+				},
 			},
 		];
 	}
