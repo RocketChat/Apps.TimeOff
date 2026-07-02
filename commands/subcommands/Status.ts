@@ -30,7 +30,9 @@ export async function statusCommand(
 	}
 
 	if (timeOffEntry.status === TimeOffStatus.ON_TIME_OFF) {
-		notificationMessage = `${NOTIFICATION_MESSAGES.status_in}${timeOffEntry.message}`;
+		notificationMessage = timeOffEntry.message
+			? `${NOTIFICATION_MESSAGES.status_in}${timeOffEntry.message}`
+			: NOTIFICATION_MESSAGES.status_in_no_message;
 	} else {
 		notificationMessage = `${NOTIFICATION_MESSAGES.status_out}`;
 	}

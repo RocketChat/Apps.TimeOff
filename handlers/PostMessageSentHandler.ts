@@ -58,10 +58,13 @@ export class PostMessageSentHandler {
 		message: IMessage,
 		sender: IUser,
 		receiver: IUser,
-		timeOffMessage: string,
+		timeOffMessage?: string,
 	): Promise<void> {
 		const formattedMessage = TimeOffMessageFormatter.format(receiver.username, timeOffMessage);
-		await this.notifier.notifyUser(message.room, sender, timeOffMessage, formattedMessage);
+		const fallbackText = timeOffMessage
+			? `${receiver.username} is currently on time off. They left the following message: ${timeOffMessage}`
+			: `${receiver.username} is currently on time off.`;
+		await this.notifier.notifyUser(message.room, sender, fallbackText, formattedMessage);
 	}
 
 	private shouldSendNotification(timeOffEntry: ITimeOff | undefined, senderId: string): timeOffEntry is ITimeOff {

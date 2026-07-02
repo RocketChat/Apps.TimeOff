@@ -8,12 +8,13 @@ export async function helpCommand(app: TimeOffApp, context: SlashCommandContext,
 	const room = context.getRoom();
 
 	const message =
-		`*Time Off App Help*\n\n` +
+		`*Time-off Help*\n\n` +
 		`*Commands*\n` +
-		`• \`/time-off start\` - Start a new time off\n` +
-		`• \`/time-off end\` - End an existing time off\n` +
-		`• \`/time-off status\` - Check the current time off status\n` +
-		`• \`/time-off help\` - Display this help message\n`;
+		`• \`/time-off start\` starts new time off period\n` +
+		`• \`/time-off start [message]\` start a new time off period with a custom message\n` +
+		`• \`/time-off end\` ends current time off period\n` +
+		`• \`/time-off status\` shows current time off status\n` +
+		`• \`/time-off help\` shows this list\n`;
 
 	const notifier = new AppNotifier(app, read);
 	await notifier.notifyUser(room, sender, message);

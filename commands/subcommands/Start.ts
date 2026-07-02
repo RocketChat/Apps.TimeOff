@@ -19,16 +19,13 @@ export async function startCommand(
 	const room = context.getRoom();
 	const notifier = new AppNotifier(app, read);
 
-	let message = context.getArguments().join(' ').replace(CommandEnum.START, '');
-	if (!message) {
-		message = NOTIFICATION_MESSAGES.default_reply_message;
-	}
+	const customMessage = context.getArguments().join(' ').replace(CommandEnum.START, '').trim();
 
 	const timeOffEntry: ITimeOff = {
 		coreUserId: currentUser.id,
 		username: currentUser.username,
 		status: TimeOffStatus.ON_TIME_OFF,
-		message: message,
+		message: customMessage || undefined,
 		lastNotifiedAtBySenderId: {},
 	};
 
@@ -36,6 +33,8 @@ export async function startCommand(
 	const timeOffService = new TimeOffService(timeOffRepository);
 	const savedTimeOff = await timeOffService.saveTimeOff(timeOffEntry);
 
-	const notificationMessage = !savedTimeOff ? NOTIFICATION_MESSAGES.error : NOTIFICATION_MESSAGES.started;
+	const notificationMessage = !savedTimeOff
+		? NOTIFICATION_MESSAGES.error
+		: NOTIFICATION_MESSAGES.started(customMessage || undefined);
 	await notifier.notifyUser(room, currentUser, notificationMessage);
 }
