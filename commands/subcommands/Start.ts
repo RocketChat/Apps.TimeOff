@@ -20,13 +20,12 @@ export async function startCommand(
 	const notifier = new AppNotifier(app, read);
 
 	const customMessage = context.getArguments().join(' ').replace(CommandEnum.START, '').trim();
-	const message = customMessage || NOTIFICATION_MESSAGES.default_reply_message;
 
 	const timeOffEntry: ITimeOff = {
 		coreUserId: currentUser.id,
 		username: currentUser.username,
 		status: TimeOffStatus.ON_TIME_OFF,
-		message: message,
+		message: customMessage || undefined,
 		lastNotifiedAtBySenderId: {},
 	};
 
